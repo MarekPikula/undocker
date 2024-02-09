@@ -5,6 +5,13 @@ Undocker
 
 Converts a Docker image (a bunch of layers) to a flattened "rootfs" tarball.
 
+Project Status
+--------------
+
+**The original author no longer uses Docker ecosystem, thus the project is
+abandoned. If you decide to fork and continue using it, ping me, I will link it
+to your fork from here.**
+
 Why?
 ----
 
