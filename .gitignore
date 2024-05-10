@@ -1,4 +1,5 @@
 /undocker
-/undocker-*
 coverage.html
-sha256sum.txt*
+
+t/*.tar
+t/*-got.txt

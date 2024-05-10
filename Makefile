@@ -27,3 +27,26 @@ coverage.html: coverage.out
 .PHONY: clean
 clean:
 	rm -f undocker coverage.html
+
+TEST_IMAGES = busybox-glibc_65ad0d468eb1
+
+.PHONY: test-integration
+test-integration: $(foreach IMG,$(TEST_IMAGES),test-integration-$(IMG))
+
+ifeq ($(shell uname -s),Darwin)
+    TAR := gtar
+else
+    TAR := tar
+endif
+
+define TEST_RULES
+.PHONY: test-integration-$(IMG)
+test-integration-$(IMG): undocker t/$(IMG).tar t/$(IMG).txt
+	./undocker t/$(IMG).tar - | $$(TAR) -tv > t/$(IMG)-got.txt
+	diff -u t/$(IMG).txt t/$(IMG)-got.txt
+	@echo "$(IMG) success"
+
+t/$(IMG).tar:
+	wget -O $$@ https://git.jakstys.lt/api/packages/motiejus/generic/undocker-tests/0/$(IMG).tar
+endef
+$(foreach IMG,$(TEST_IMAGES),$(eval $(TEST_RULES)))
