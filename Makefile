@@ -1,4 +1,4 @@
-SCRIPTS = $(shell awk '/#!\/bin\/(ba)?sh/&&FNR==1{print FILENAME}' $(shell git ls-files))
+SCRIPTS = $(shell awk '/#!\/usr\/bin\/env (ba)?sh/&&FNR==1{print FILENAME}' $(shell git ls-files))
 GODEPS = $(shell git ls-files '*.go' go.mod go.sum)
 
 VSN ?= $(shell git describe --dirty)
@@ -14,7 +14,7 @@ test: coverage.out
 .PHONY: lint
 lint:
 	go vet ./...
-	$(shell go env GOPATH)/bin/staticcheck -f stylish ./...
+	staticcheck -f stylish ./...
 	shellcheck $(SCRIPTS)
 
 .INTERMEDIATE: coverage.out
