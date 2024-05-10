@@ -43,7 +43,7 @@ func main() {
 
 	c := &command{flattener: rootfs.Flatten, Stdout: os.Stdout}
 	if err := c.execute(os.Args[1], os.Args[2]); err != nil {
-		fmt.Printf("Error: %v\n", err)
+		fmt.Sprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 	os.Exit(0)
