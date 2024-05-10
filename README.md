@@ -8,9 +8,11 @@ Converts a Docker image (a bunch of layers) to a flattened "rootfs" tarball.
 Project Status
 --------------
 
-**The original author no longer uses Docker ecosystem, thus the project is
-abandoned. If you decide to fork and continue using it, ping me, I will link it
-to your fork from here.**
+The project was announced to be deprecated in the beginning of 2024, but the
+maintainer has an interest in Docker ecosystem again, thus will maintain it
+somewhat starting at mid-2024.
+
+The author has some significant changes in mind, but the timeline is unknown.
 
 Why?
 ----
