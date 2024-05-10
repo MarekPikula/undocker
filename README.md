@@ -97,8 +97,9 @@ The following contributions may be accepted:
 - Regression reports.
 
 If you found a container that undocker cannot extract, or extracts incorrectly
-and you need this that work with undocker, do not submit an issue: submit a
-patchset.
+and you need this that work with undocker, submit a patchset. If there is a
+reasonably small container that can reproduce the issue, we may add it to
+integration tests. See `make test-integration` on how that works.
 
 Reports of regression reports must provide examples of "works before" and "does
 not work after". Issues without an accompanying patch will most likely be
