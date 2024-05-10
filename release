@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 _err(){ >&2 echo "ERROR: $*"; exit 1; }
