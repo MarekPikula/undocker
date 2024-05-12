@@ -1,9 +1,9 @@
-SCRIPTS = $(shell awk '/#!\/usr\/bin\/env (ba)?sh/&&FNR==1{print FILENAME}' $(shell git ls-files))
-GODEPS = $(shell git ls-files '*.go' go.mod go.sum)
+SCRIPTS := $(shell awk '/#!\/usr\/bin\/env (ba)?sh/&&FNR==1{print FILENAME}' $(shell git ls-files))
+GODEPS := $(shell git ls-files '*.go' go.mod go.sum)
 
 VSN ?= $(shell git describe --dirty)
-VSNHASH = $(shell git rev-parse --verify HEAD)
-LDFLAGS = -ldflags "-X main.Version=$(VSN) -X main.VersionHash=$(VSNHASH)"
+VSNHASH ?= $(shell git rev-parse --verify HEAD)
+LDFLAGS ?= -ldflags "-X main.Version=$(VSN) -X main.VersionHash=$(VSNHASH)"
 
 undocker: ## builds binary for the current architecture
 	go build $(LDFLAGS) -o $@
