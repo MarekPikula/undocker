@@ -5,7 +5,7 @@ VSN ?= $(shell git describe --dirty)
 VSNHASH ?= $(shell git rev-parse --verify HEAD)
 LDFLAGS ?= -ldflags "-X main.Version=$(VSN) -X main.VersionHash=$(VSNHASH)"
 
-undocker: ## builds binary for the current architecture
+undocker: $(GODEPS) ## builds binary for the current architecture
 	go build $(LDFLAGS) -o $@
 
 .PHONY: test
