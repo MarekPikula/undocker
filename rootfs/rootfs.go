@@ -40,8 +40,8 @@ func Flatten(rd io.ReadSeeker, w io.Writer) (_err error) {
 	var closer func() error
 	var err error
 
-	// layerOffsets maps a layer name (a9b123c0daa/layer.tar) to it's offset
-	layerOffsets := map[string]int64{}
+	// fileOffsets maps a file name (a9b123c0daa/layer.tar) to it's offset
+	fileOffsets := map[string]int64{}
 
 	// manifest is the docker manifest in the image
 	var manifest dockerManifestJSON
@@ -58,31 +58,29 @@ func Flatten(rd io.ReadSeeker, w io.Writer) (_err error) {
 		if hdr.Typeflag != tar.TypeReg {
 			continue
 		}
-		switch {
-		case filepath.Clean(hdr.Name) == _manifestJSON:
+		here, err := rd.Seek(0, io.SeekCurrent)
+		if err != nil {
+			return err
+		}
+		fileOffsets[strings.TrimPrefix(hdr.Name, "./")] = here
+		if filepath.Clean(hdr.Name) == _manifestJSON {
 			dec := json.NewDecoder(tr)
 			if err := dec.Decode(&manifest); err != nil {
 				return fmt.Errorf("decode %s: %w", _manifestJSON, err)
 			}
-		case strings.HasSuffix(hdr.Name, _tarSuffix):
-			here, err := rd.Seek(0, io.SeekCurrent)
-			if err != nil {
-				return err
-			}
-			layerOffsets[strings.TrimPrefix(hdr.Name, "./")] = here
 		}
 	}
 
-	if err := validateManifest(layerOffsets, manifest); err != nil {
+	if err := validateManifest(fileOffsets, manifest); err != nil {
 		return err
 	}
 
 	// enumerate layers the way they would be laid down in the image
-	layers := make([]nameOffset, len(layerOffsets))
+	layers := make([]nameOffset, len(manifest[0].Layers))
 	for i, name := range manifest[0].Layers {
 		layers[i] = nameOffset{
 			name:   name,
-			offset: layerOffsets[strings.TrimPrefix(name, "./")],
+			offset: fileOffsets[strings.TrimPrefix(name, "./")],
 		}
 	}
 
@@ -232,7 +230,7 @@ func whiteoutDirs(whreaddir map[string]int, nlayers int) []*tree {
 
 // validateManifest
 func validateManifest(
-	layerOffsets map[string]int64,
+	fileOffsets map[string]int64,
 	manifest dockerManifestJSON,
 ) error {
 	if len(manifest) == 0 {
@@ -240,7 +238,7 @@ func validateManifest(
 	}
 
 	for _, layer := range manifest[0].Layers {
-		if _, ok := layerOffsets[layer]; !ok {
+		if _, ok := fileOffsets[layer]; !ok {
 			return fmt.Errorf("%s defined in manifest, missing in tarball", layer)
 		}
 	}
