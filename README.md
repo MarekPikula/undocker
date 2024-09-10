@@ -108,12 +108,7 @@ rejected.
 Communication
 -------------
 
-Feel free to ping me [directly][motiejus-comms].
-
-LICENSE
--------
-
-MIT
+Ping me [directly][motiejus-comms].
 
 [1]: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 [2]: https://fly.io/blog/docker-without-docker/
