@@ -30,7 +30,9 @@ coverage.html: coverage.out
 clean:
 	rm -f undocker coverage.html
 
-TEST_IMAGES = busybox-glibc_65ad0d468eb1
+TEST_IMAGES = \
+			  busybox-glibc_65ad0d468eb1 \
+			  docker_v27.1.2_save
 
 .PHONY: test-integration
 test-integration: $(foreach IMG,$(TEST_IMAGES),test-integration-$(IMG))
