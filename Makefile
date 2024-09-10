@@ -16,7 +16,7 @@ lint:
 	go vet ./...
 	staticcheck -f stylish ./...
 	shellcheck $(SCRIPTS)
-	shfmt $(SCRIPTS)
+	shfmt -w -i 4 $(SCRIPTS)
 	git diff --exit-code
 
 .INTERMEDIATE: coverage.out
